@@ -97,9 +97,11 @@ func main() -> Int32 {
     guard [2,3].contains(CommandLine.argc) else {
         let url = URL(fileURLWithPath: CommandLine.arguments[0])
         let name = url.lastPathComponent
-        print("Usage: \(name) path-to-source-icon [output-folder]")
-        print("Rescales source icon to sizes needed by iOS 7 - 11 and puts them to output-folder.")
-        print("If output-folder is not provided, subfolder `\(defaultOutputFolder)` of path-to-source-icon is used.")
+        print("""
+            Usage: \(name) path-to-source-icon [output-folder]
+                Rescales source icon to sizes needed by iOS 7 - 11 and puts them to output-folder.
+                If output-folder is not provided, subfolder `\(defaultOutputFolder)` of path-to-source-icon is used.
+            """)
         return 1
     }
 
