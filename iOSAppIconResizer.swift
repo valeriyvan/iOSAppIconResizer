@@ -133,7 +133,6 @@ func main() -> Int32 {
             print(error)
         }
     }
-    print("done")
     return 0
 }
 
