@@ -66,27 +66,34 @@ let sizes: [(Double, String)] = [
 ]
 
 extension NSImage {
-    func resized(to newSize: NSSize) -> NSImage? {
-        guard let bitmapRep = NSBitmapImageRep(
-            bitmapDataPlanes: nil, pixelsWide: Int(newSize.width), pixelsHigh: Int(newSize.height),
-            bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
-            colorSpaceName: .calibratedRGB, bytesPerRow: 0, bitsPerPixel: 0)
-            else { return nil }
-        bitmapRep.size = newSize
+    var unscaledBitmapImageRep: NSBitmapImageRep {
+        guard let rep = NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: Int(size.width),
+            pixelsHigh: Int(size.height),
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: .deviceRGB,
+            bytesPerRow: 0,
+            bitsPerPixel: 0 )
+        else { preconditionFailure() }
         NSGraphicsContext.saveGraphicsState()
-        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmapRep)
-        draw(in: NSRect(origin: .zero, size: newSize), from: .zero, operation: .copy, fraction: 1.0)
+        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
+        draw(at: .zero, from: .zero, operation: .sourceOver, fraction: 1.0)
         NSGraphicsContext.restoreGraphicsState()
-        let resizedImage = NSImage(size: newSize)
-        resizedImage.addRepresentation(bitmapRep)
-        return resizedImage
+        return rep
     }
 
-    var png: Data? {
-        lockFocus()
-        defer { unlockFocus() }
-        guard let bitmap = NSBitmapImageRep(focusedViewRect: NSRect(origin: .zero, size: size)) else { return nil }
-        return bitmap.representation(using: .png, properties: [:])
+    func write(usingType type: NSBitmapImageRep.FileType, pixelsSize: NSSize?, to url: URL) throws {
+        if let pixelsSize = pixelsSize {
+            size = pixelsSize
+        }
+        guard let data = unscaledBitmapImageRep.representation(using: type, properties: [.compressionFactor: 1.0]) else {
+            preconditionFailure()
+        }
+        try data.write(to: url)
     }
 }
 
@@ -127,17 +134,12 @@ func main() -> Int32 {
     }
 
     for (size, suffix) in sizes {
-        let newSize = NSSize(width: size / 2.0, height: size / 2.0) // TODO: !!!
         let outputUrl = outputFolderUrl
             .appendingPathComponent(inputName + suffix, isDirectory: false)
             .appendingPathExtension(ext)
         print(outputUrl.path.removingPercentEncoding ?? outputUrl.path, terminator: "")
-        guard let png = inputImage.resized(to: newSize)?.png else {
-            print(" rescaling failed")
-            continue
-        }
         do {
-            try png.write(to: outputUrl)
+            try inputImage.write(usingType: .png, pixelsSize: NSSize(width: size, height: size), to: outputUrl)
         } catch {
             print(" ", error)
             continue
@@ -148,4 +150,5 @@ func main() -> Int32 {
     return 0
 }
 
-exit(main())
+let code = main()
+exit(code)
