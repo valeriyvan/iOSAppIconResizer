@@ -81,6 +81,13 @@ extension NSImage {
         resizedImage.addRepresentation(bitmapRep)
         return resizedImage
     }
+
+    var png: Data? {
+        lockFocus()
+        defer { unlockFocus() }
+        guard let bitmap = NSBitmapImageRep(focusedViewRect: NSRect(origin: .zero, size: size)) else { return nil }
+        return bitmap.representation(using: .png, properties: [:])
+    }
 }
 
 func main() -> Int32 {
@@ -117,23 +124,23 @@ func main() -> Int32 {
 
     for (size, suffix) in sizes {
         let newSize = NSSize(width: size / 2.0, height: size / 2.0) // TODO: !!!
-        let outputUrl = outputFolderUrl.appendingPathComponent(inputName + suffix, isDirectory: false).appendingPathExtension(ext)
-
-        print(outputUrl.path.removingPercentEncoding ?? outputUrl.path)
-
-        let resized = inputImage.resized(to: newSize)!
-
-        resized.lockFocus()
-        let bitmapRep = NSBitmapImageRep(focusedViewRect: NSRect(origin: .zero, size: newSize))!
-        resized.unlockFocus()
-
-        let pngData = bitmapRep.representation(using: .png, properties: [:])!
-        do {
-            try pngData.write(to: outputUrl)
-        } catch let error {
-            print(error)
+        let outputUrl = outputFolderUrl
+            .appendingPathComponent(inputName + suffix, isDirectory: false)
+            .appendingPathExtension(ext)
+        print(outputUrl.path.removingPercentEncoding ?? outputUrl.path, terminator: "")
+        guard let png = inputImage.resized(to: newSize)?.png else {
+            print(" rescaling failed")
+            continue
         }
+        do {
+            try png.write(to: outputUrl)
+        } catch {
+            print(" ", error)
+            continue
+        }
+        print()
     }
+
     return 0
 }
 
