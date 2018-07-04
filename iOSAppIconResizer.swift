@@ -1,6 +1,5 @@
 #!/usr/bin/swift
 
-//  iOSAppIconResizer
 //  Created by Valeriy Van on 03-JUL-2018.
 //  Copyright © 2018 Valeriy Van. All rights reserved.
 
