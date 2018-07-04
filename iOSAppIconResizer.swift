@@ -7,6 +7,63 @@
 import Foundation
 import Cocoa
 
+let sizes: [(NSSize, String)] = [
+    // iPhone Notification
+    // iOS 7-11
+    // 20pt
+    (NSSize(width: 40, height: 40), "20@2x"),
+    (NSSize(width: 60, height: 60), "20@3x"),
+
+    // iPhone
+    // Spotlight - iOS 5,6
+    // Settings - iOS 5-11
+    (NSSize(width: 58, height: 58), "29@2x"),
+    (NSSize(width: 87, height: 87), "29@3x"),
+
+    // iPhone Spotlight
+    // iOS 7-11
+    // 40pt
+    (NSSize(width: 80, height: 80), "40@2x"),
+    (NSSize(width: 120, height: 120), "40@3x"),
+
+    // iPhone App
+    // iOS 7-11
+    // 60pt
+    (NSSize(width: 120, height: 120), "60@2x"),
+    (NSSize(width: 180, height: 180), "60@3x"),
+
+    // iPad Notifications
+    // iOS 7-11
+    // 20pt
+    (NSSize(width: 20, height: 20), "20"),
+    (NSSize(width: 40, height: 40), "20@2x"),
+
+    // iPad Settings iOS 5-11 29pt
+    (NSSize(width: 29, height: 29), "29"),
+    (NSSize(width: 58, height: 58), "29@2x"),
+
+    // iPad Spotlight
+    // iOS 7-11
+    // 40pt
+    (NSSize(width: 40, height: 40), "40"),
+    (NSSize(width: 80, height: 80), "40@2x"),
+
+    // iPad App
+    // iOS 7-11
+    // 76pt
+    (NSSize(width: 76, height: 76), "76"),
+    (NSSize(width: 152, height: 152), "76@2x"),
+
+    // iPad Pro App
+    // iOS 9-11
+    // 83.5pt
+    (NSSize(width: 167, height: 167), "83,5@2x"),
+
+    // App Store iOS
+    // 1024pt
+    (NSSize(width: 1024, height: 1024), "1024")
+]
+
 extension NSImage {
     func resized(to newSize: NSSize) -> NSImage? {
         guard let bitmapRep = NSBitmapImageRep(
@@ -56,63 +113,6 @@ func main() -> Int32 {
         print(error)
         // continue
     }
-
-    let sizes: [(NSSize, String)] = [
-        // iPhone Notification
-        // iOS 7-11
-        // 20pt
-        (NSSize(width: 40, height: 40), "20@2x"),
-        (NSSize(width: 60, height: 60), "20@3x"),
-
-        // iPhone
-        // Spotlight - iOS 5,6
-        // Settings - iOS 5-11
-        (NSSize(width: 58, height: 58), "29@2x"),
-        (NSSize(width: 87, height: 87), "29@3x"),
-
-        // iPhone Spotlight
-        // iOS 7-11
-        // 40pt
-        (NSSize(width: 80, height: 80), "40@2x"),
-        (NSSize(width: 120, height: 120), "40@3x"),
-
-        // iPhone App
-        // iOS 7-11
-        // 60pt
-        (NSSize(width: 120, height: 120), "60@2x"),
-        (NSSize(width: 180, height: 180), "60@3x"),
-
-        // iPad Notifications
-        // iOS 7-11
-        // 20pt
-        (NSSize(width: 20, height: 20), "20"),
-        (NSSize(width: 40, height: 40), "20@2x"),
-
-        // iPad Settings iOS 5-11 29pt
-        (NSSize(width: 29, height: 29), "29"),
-        (NSSize(width: 58, height: 58), "29@2x"),
-
-        // iPad Spotlight
-        // iOS 7-11
-        // 40pt
-        (NSSize(width: 40, height: 40), "40"),
-        (NSSize(width: 80, height: 80), "40@2x"),
-
-        // iPad App
-        // iOS 7-11
-        // 76pt
-        (NSSize(width: 76, height: 76), "76"),
-        (NSSize(width: 152, height: 152), "76@2x"),
-
-        // iPad Pro App
-        // iOS 9-11
-        // 83.5pt
-        (NSSize(width: 167, height: 167), "83,5@2x"),
-
-        // App Store iOS
-        // 1024pt
-        (NSSize(width: 1024, height: 1024), "1024")
-    ]
 
     for (size, suffix) in sizes {
         let newSize = NSSize(width: size.width / 2.0, height: size.height / 2.0) // TODO: !!!
