@@ -38,7 +38,9 @@ let sizes: [(Double, String)] = [
     (20.0, "20"),
     (40.0, "20@2x"),
 
-    // iPad Settings iOS 5-11 29pt
+    // iPad Settings
+    // iOS 5-11
+    // 29pt
     (29.0, "29"),
     (58.0, "29@2x"),
 
