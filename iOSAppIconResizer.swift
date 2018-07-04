@@ -116,7 +116,9 @@ func main() -> Int32 {
         return -1
     }
 
-    let outputFolderUrl = CommandLine.argc == 3 ? URL(fileURLWithPath: CommandLine.arguments[2], isDirectory: true) : inputUrl.deletingLastPathComponent().appendingPathComponent(defaultOutputFolder, isDirectory: true)
+    let outputFolderUrl = CommandLine.argc == 3 ?
+        URL(fileURLWithPath: CommandLine.arguments[2], isDirectory: true) :
+        inputUrl.deletingLastPathComponent().appendingPathComponent(defaultOutputFolder, isDirectory: true)
     do {
         try FileManager.default.createDirectory(at: outputFolderUrl, withIntermediateDirectories: true, attributes: nil)
     } catch {
