@@ -114,10 +114,7 @@ func main() -> Int32 {
 
     let inputUrl = URL(fileURLWithPath: CommandLine.arguments[1])
     let inputName = inputUrl.deletingPathExtension().lastPathComponent
-    var ext = inputUrl.pathExtension
-    if ext.isEmpty {
-        ext = defaultExt
-    }
+    let ext = inputUrl.pathExtension.isEmpty ? defaultExt : inputUrl.pathExtension
     guard let inputImage = NSImage(contentsOf: inputUrl) else {
         print("Can't open \(inputUrl)")
         return -1
