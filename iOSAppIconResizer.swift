@@ -140,6 +140,10 @@ func main() -> Int32 {
         return -1
     }
 
+    if inputImage.size.width != inputImage.size.height {
+        print("Warning: input image has size \(Int(inputImage.size.width))x\(Int(inputImage.size.height)) which isn't square. Output images will be stretched.")
+    }
+    
     let outputFolderUrl = CommandLine.argc == 3 ?
         URL(fileURLWithPath: CommandLine.arguments[2], isDirectory: true) :
         inputUrl.deletingLastPathComponent().appendingPathComponent(defaultOutputFolder, isDirectory: true)
