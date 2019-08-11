@@ -106,6 +106,32 @@ extension NSImage {
         return rep
     }
 
+    var centerCroppedImage: NSImage {
+        let minSize = min(size.width, size.height)
+        let croppedSize = NSSize(width: minSize, height: minSize)
+        let croppedOrigin = NSPoint(x: (size.width - minSize) / 2.0, y: (size.height - minSize) / 2.0)
+        let croppedRect = NSRect(origin: croppedOrigin, size: croppedSize)
+        guard let rep = NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: Int(minSize),
+            pixelsHigh: Int(minSize),
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: .deviceRGB,
+            bytesPerRow: 0,
+            bitsPerPixel: 0)
+            else { preconditionFailure() }
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
+        draw(at: .zero, from: croppedRect, operation: .sourceOver, fraction: 1.0)
+        NSGraphicsContext.restoreGraphicsState()
+        let image = NSImage(size: NSSize(width: minSize, height: minSize))
+        image.addRepresentation(rep)
+        return image
+    }
+
     func write(usingType type: NSBitmapImageRep.FileType, pixelsSize: NSSize?, to url: URL) throws {
         if let pixelsSize = pixelsSize {
             size = pixelsSize
@@ -135,15 +161,16 @@ func main() -> Int32 {
     let inputUrl = URL(fileURLWithPath: CommandLine.arguments[1])
     let inputName = inputUrl.deletingPathExtension().lastPathComponent
     let ext = inputUrl.pathExtension.isEmpty ? defaultExt : inputUrl.pathExtension
-    guard let inputImage = NSImage(contentsOf: inputUrl) else {
+    guard var inputImage = NSImage(contentsOf: inputUrl) else {
         print("Can't open \(inputUrl)")
         return -1
     }
 
     if inputImage.size.width != inputImage.size.height {
-        print("Warning: input image has size \(Int(inputImage.size.width))x\(Int(inputImage.size.height)) which isn't square. Output images will be stretched.")
+        print("Warning: input image has size \(Int(inputImage.size.width))x\(Int(inputImage.size.height)) which isn't square. Output images will be croped.")
+        inputImage = inputImage.centerCroppedImage
     }
-    
+
     let outputFolderUrl = CommandLine.argc == 3 ?
         URL(fileURLWithPath: CommandLine.arguments[2], isDirectory: true) :
         inputUrl.deletingLastPathComponent().appendingPathComponent(defaultOutputFolder, isDirectory: true)
