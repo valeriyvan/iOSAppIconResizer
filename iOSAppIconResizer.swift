@@ -86,8 +86,8 @@ let sizes: [(Double, String)] = [
 ]
 
 extension NSImage {
-    var unscaledBitmapImageRep: NSBitmapImageRep {
-        guard let rep = NSBitmapImageRep(
+    private func bitmapImageRep(size: NSSize) -> NSBitmapImageRep? {
+        return NSBitmapImageRep(
             bitmapDataPlanes: nil,
             pixelsWide: Int(size.width),
             pixelsHigh: Int(size.height),
@@ -97,8 +97,11 @@ extension NSImage {
             isPlanar: false,
             colorSpaceName: .deviceRGB,
             bytesPerRow: 0,
-            bitsPerPixel: 0 )
-        else { preconditionFailure() }
+            bitsPerPixel: 0)
+    }
+
+    var unscaledBitmapImageRep: NSBitmapImageRep {
+        guard let rep = bitmapImageRep(size: size) else { preconditionFailure() }
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
         draw(at: .zero, from: .zero, operation: .sourceOver, fraction: 1.0)
@@ -111,18 +114,7 @@ extension NSImage {
         let croppedSize = NSSize(width: minSize, height: minSize)
         let croppedOrigin = NSPoint(x: (size.width - minSize) / 2.0, y: (size.height - minSize) / 2.0)
         let croppedRect = NSRect(origin: croppedOrigin, size: croppedSize)
-        guard let rep = NSBitmapImageRep(
-            bitmapDataPlanes: nil,
-            pixelsWide: Int(minSize),
-            pixelsHigh: Int(minSize),
-            bitsPerSample: 8,
-            samplesPerPixel: 4,
-            hasAlpha: true,
-            isPlanar: false,
-            colorSpaceName: .deviceRGB,
-            bytesPerRow: 0,
-            bitsPerPixel: 0)
-            else { preconditionFailure() }
+        guard let rep = bitmapImageRep(size: croppedSize) else { preconditionFailure() }
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
         draw(at: .zero, from: croppedRect, operation: .sourceOver, fraction: 1.0)
