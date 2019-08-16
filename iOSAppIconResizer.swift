@@ -100,12 +100,16 @@ extension NSImage {
             bitsPerPixel: 0)
     }
 
+    private func draw(bitmapImageRep: NSBitmapImageRep, at: NSPoint, from: NSRect) {
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmapImageRep)
+        draw(at: at, from: from, operation: .sourceOver, fraction: 1.0)
+        NSGraphicsContext.restoreGraphicsState()
+    }
+
     var unscaledBitmapImageRep: NSBitmapImageRep {
         guard let rep = bitmapImageRep(size: size) else { preconditionFailure() }
-        NSGraphicsContext.saveGraphicsState()
-        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
-        draw(at: .zero, from: .zero, operation: .sourceOver, fraction: 1.0)
-        NSGraphicsContext.restoreGraphicsState()
+        draw(bitmapImageRep: rep, at: .zero, from: .zero)
         return rep
     }
 
@@ -115,11 +119,8 @@ extension NSImage {
         let croppedOrigin = NSPoint(x: (size.width - minSize) / 2.0, y: (size.height - minSize) / 2.0)
         let croppedRect = NSRect(origin: croppedOrigin, size: croppedSize)
         guard let rep = bitmapImageRep(size: croppedSize) else { preconditionFailure() }
-        NSGraphicsContext.saveGraphicsState()
-        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
-        draw(at: .zero, from: croppedRect, operation: .sourceOver, fraction: 1.0)
-        NSGraphicsContext.restoreGraphicsState()
-        let image = NSImage(size: NSSize(width: minSize, height: minSize))
+        draw(bitmapImageRep: rep, at: .zero, from: croppedRect)
+        let image = NSImage(size: croppedSize)
         image.addRepresentation(rep)
         return image
     }
