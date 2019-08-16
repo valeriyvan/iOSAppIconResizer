@@ -107,7 +107,7 @@ extension NSImage {
         NSGraphicsContext.restoreGraphicsState()
     }
 
-    var unscaledBitmapImageRep: NSBitmapImageRep {
+    private var unscaledBitmapImageRep: NSBitmapImageRep {
         guard let rep = bitmapImageRep(size: size) else { preconditionFailure() }
         draw(bitmapImageRep: rep, at: .zero, from: .zero)
         return rep
