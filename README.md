@@ -1,7 +1,9 @@
-Usage: `iOSAppIconResizer.swift path-to-source-icon [output-folder]`
+Usage: `iOSAppIconResizer.swift path-to-source-icon [output]`
 
-Rescales source icon to sizes needed by Xcode 10 for iOS 7 - 12 and puts them to `output-folder`.
-
-If `output-folder` is not provided, subfolder `output` of `path-to-source-icon` is used.
-
-This project is licensed under the terms of the MIT license.
+Rescales source icon to sizes needed by Xcode 10 for iOS 7 - 12 and puts them to output-folder.
+If output is not provided, subfolder `output` in path-to-source-icon is used for writing images, 
+filename of path-to-source-icon is used as base of file name.
+If output is provided, it might specify output folder, base file name or both:
+* if output doesn't contain `/` it is treated as base file name only;
+* if output ends with `/` it is treated as specifying output folder only;
+* otherwise part before last `/` is treated as output folder and after last `/` as base file name.
