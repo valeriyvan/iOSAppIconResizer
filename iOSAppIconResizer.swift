@@ -144,15 +144,19 @@ func main() -> Int32 {
         let url = URL(fileURLWithPath: CommandLine.arguments[0])
         let name = url.lastPathComponent
         print("""
-            Usage: \(name) path-to-source-icon [output-folder]
+            Usage: \(name) path-to-source-icon [output]
                 Rescales source icon to sizes needed by Xcode 10 for iOS 7 - 12 and puts them to output-folder.
-                If output-folder is not provided, subfolder `\(defaultOutputFolder)` of path-to-source-icon is used.
+                If output is not provided, subfolder `\(defaultOutputFolder)` in path-to-source-icon is used
+                for writing images, filename of path-to-source-icon is used as base of file name.
+                If output is provided, it might specify output folder, base file name or both:
+                    if output doesn't contain `/` it is treated as base file name only;
+                    if output ends with `/` it is treated as specifying output folder only;
+                    otherwise part before last `/` is treated as output folder and after last `/` as base file name.
             """)
         return 1
     }
 
     let inputUrl = URL(fileURLWithPath: CommandLine.arguments[1])
-    let inputName = inputUrl.deletingPathExtension().lastPathComponent
     let ext = inputUrl.pathExtension.isEmpty ? defaultExt : inputUrl.pathExtension
     guard var inputImage = NSImage(contentsOf: inputUrl) else {
         print("Can't open \(inputUrl)")
@@ -164,9 +168,29 @@ func main() -> Int32 {
         inputImage = inputImage.centerCroppedImage
     }
 
-    let outputFolderUrl = CommandLine.argc == 3 ?
-        URL(fileURLWithPath: CommandLine.arguments[2], isDirectory: true) :
-        inputUrl.deletingLastPathComponent().appendingPathComponent(defaultOutputFolder, isDirectory: true)
+    let outputFolderUrl: URL
+    let outputBaseFileName: String
+    let inputFilename = inputUrl.deletingPathExtension().lastPathComponent
+    if CommandLine.argc == 3 {
+        let argument2 = CommandLine.arguments[2]
+        if argument2.contains("/") {
+            if argument2.last! == "/" {
+                outputFolderUrl = URL(fileURLWithPath: String(argument2.dropLast()), isDirectory: true)
+                outputBaseFileName = inputFilename
+            } else {
+                let range = argument2.range(of: "/", options: .backwards)!
+                outputFolderUrl = URL(fileURLWithPath: String(argument2[..<range.lowerBound]), isDirectory: true)
+                outputBaseFileName = String(argument2[range.upperBound...])
+            }
+        } else {
+            outputFolderUrl = inputUrl.deletingLastPathComponent().appendingPathComponent(defaultOutputFolder, isDirectory: true)
+            outputBaseFileName = argument2
+        }
+    } else {
+        outputFolderUrl = inputUrl.deletingLastPathComponent().appendingPathComponent(defaultOutputFolder, isDirectory: true)
+        outputBaseFileName = inputFilename
+    }
+
     do {
         try FileManager.default.createDirectory(at: outputFolderUrl, withIntermediateDirectories: true, attributes: nil)
     } catch {
@@ -176,7 +200,7 @@ func main() -> Int32 {
 
     for (size, suffix) in sizes {
         let outputUrl = outputFolderUrl
-            .appendingPathComponent(inputName + suffix, isDirectory: false)
+            .appendingPathComponent(outputBaseFileName + suffix, isDirectory: false)
             .appendingPathExtension(ext)
         print(outputUrl.path.removingPercentEncoding ?? outputUrl.path, terminator: "")
         do {
