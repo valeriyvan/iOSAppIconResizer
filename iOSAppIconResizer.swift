@@ -175,7 +175,8 @@ func main() -> Int32 {
         let argument2 = CommandLine.arguments[2]
         if argument2.contains("/") {
             if argument2.last! == "/" {
-                outputFolderUrl = URL(fileURLWithPath: String(argument2.dropLast()), isDirectory: true)
+                let outputFolderString = argument2.dropLast(argument2.count > 1 ? 1 : 0) // keep unchanges "/" otherwise drop last char
+                outputFolderUrl = URL(fileURLWithPath: String(outputFolderString), isDirectory: true)
                 outputBaseFileName = inputFilename
             } else {
                 let range = argument2.range(of: "/", options: .backwards)!
