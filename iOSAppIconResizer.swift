@@ -8,55 +8,55 @@ import Cocoa
 
 let sizes: [(Double, String)] = [
     // iPhone Notification
-    // iOS 7-13
+    // iOS 7-14
     // 20pt
     (40.0, "20@2x"),
     (60.0, "20@3x"),
 
     // iPhone Settings
-    // iOS 7-13
+    // iOS 7-14
     // 29pt
     (58.0, "29@2x"),
     (87.0, "29@3x"),
 
     // iPhone Spotlight
-    // iOS 7-13
+    // iOS 7-14
     // 40pt
     (80.0, "40@2x"),
     (120.0, "40@3x"),
 
     // iPhone App
-    // iOS 7-13
+    // iOS 7-14
     // 60pt
     (120.0, "60@2x"),
     (180.0, "60@3x"),
 
     // iPad Notifications
-    // iOS 7-13
+    // iOS 7-14
     // 20pt
     (20.0, "20"),
     (40.0, "20@2x"),
 
     // iPad Settings
-    // iOS 7-13
+    // iOS 7-14
     // 29pt
     (29.0, "29"),
     (58.0, "29@2x"),
 
     // iPad Spotlight
-    // iOS 7-13
+    // iOS 7-14
     // 40pt
     (40.0, "40"),
     (80.0, "40@2x"),
 
     // iPad App
-    // iOS 7-13
+    // iOS 7-14
     // 76pt
     (76.0, "76"),
     (152.0, "76@2x"),
 
     // iPad Pro (12.9-inch) App
-    // iOS 9-13
+    // iOS 9-14
     // 83.5pt
     (167.0, "83,5@2x"),
 
@@ -126,7 +126,7 @@ func main() -> Int32 {
         let name = url.lastPathComponent
         print("""
             Usage: \(name) path-to-source-icon [output]
-                Rescales source icon to sizes needed by Xcode 11 for iOS 7 - 13 and puts them to output-folder.
+                Rescales source icon to sizes needed by Xcode 11 for iOS 7 - 14 and puts them to output-folder.
                 If output is not provided, subfolder `\(defaultOutputFolder)` in path-to-source-icon is used
                 for writing images, filename of path-to-source-icon is used as base of file name.
                 If output is provided, it might specify output folder, base file name or both:
