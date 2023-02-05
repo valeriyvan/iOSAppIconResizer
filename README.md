@@ -1,3 +1,5 @@
+CLI for resizing icons for iOS app in command line.
+
 Usage: `iOSAppIconResizer.swift path-to-source-icon [output]`
 
 Rescales source icon to sizes needed by Xcode 11 for iOS 7 - 14 and puts them to output-folder.
