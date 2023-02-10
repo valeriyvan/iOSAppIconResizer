@@ -8,55 +8,55 @@ import Cocoa
 
 let sizes: [(Double, String)] = [
     // iPhone Notification
-    // iOS 7-14
+    // iOS 7 - iOS 16
     // 20pt
     (40.0, "20@2x"),
     (60.0, "20@3x"),
 
     // iPhone Settings
-    // iOS 7-14
+    // iOS 7 - iOS 16
     // 29pt
     (58.0, "29@2x"),
     (87.0, "29@3x"),
 
     // iPhone Spotlight
-    // iOS 7-14
+    // iOS 7 - iOS 16
     // 40pt
     (80.0, "40@2x"),
     (120.0, "40@3x"),
 
     // iPhone App
-    // iOS 7-14
+    // iOS 7 - iOS 16
     // 60pt
     (120.0, "60@2x"),
     (180.0, "60@3x"),
 
     // iPad Notifications
-    // iOS 7-14
+    // iOS 7 - iOS 16
     // 20pt
     (20.0, "20"),
     (40.0, "20@2x"),
 
     // iPad Settings
-    // iOS 7-14
+    // iOS 7 - iOS 16
     // 29pt
     (29.0, "29"),
     (58.0, "29@2x"),
 
     // iPad Spotlight
-    // iOS 7-14
+    // iOS 7 - iOS 16
     // 40pt
     (40.0, "40"),
     (80.0, "40@2x"),
 
     // iPad App
-    // iOS 7-14
+    // iOS 7 - iOS 16
     // 76pt
     (76.0, "76"),
     (152.0, "76@2x"),
 
     // iPad Pro (12.9-inch) App
-    // iOS 9-14
+    // iOS 9 - iOS 16
     // 83.5pt
     (167.0, "83,5@2x"),
 
