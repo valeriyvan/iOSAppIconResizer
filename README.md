@@ -9,3 +9,5 @@ If output is provided, it might specify output folder, base file name or both:
 * if output doesn't contain `/` it is treated as base file name only;
 * if output ends with `/` it is treated as specifying output folder only;
 * otherwise part before last `/` is treated as output folder and after last `/` as base file name.
+
+<a href="https://www.buymeacoffee.com/valeriyvan" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
